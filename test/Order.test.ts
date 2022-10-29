@@ -1,4 +1,5 @@
 import Coupon from "../src/domain/entity/Coupon"
+import Dimension from "../src/domain/entity/Dimension"
 import Item from "../src/domain/entity/Item"
 import Order from "../src/domain/entity/Order"
 
@@ -53,6 +54,18 @@ test("Deve criar um pedido com 3 itens com cupom de desconto não expirado", fun
 
 test("Não deve criar um pedido com um item com quantidade negativa", function() {
   const order = new Order("259.556.978-37")
-
   expect(() => order.addItem(new Item(1, "Guitarra", 1000), -1)).toThrow(new Error("Invalid quantity"))
+})
+
+test("Não deve criar um pedido com um item repetido", function() {
+  const order = new Order("259.556.978-37")
+  order.addItem(new Item(1, "Guitarra", 1000), 1)
+  expect(() => order.addItem(new Item(1, "Guitarra", 1000), 1)).toThrow(new Error("Duplicated Item"))
+})
+
+test("Deve criar um pedido com frete", function() {
+  const order = new Order("259.556.978-37")
+  order.addItem(new Item(1, "Guitarra", 1000, new Dimension(100, 30, 10, 3)), 1)
+
+  expect(order.getTotal()).toBe(1030)
 })

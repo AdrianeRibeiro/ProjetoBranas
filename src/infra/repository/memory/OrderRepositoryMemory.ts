@@ -8,7 +8,7 @@ export default class OrderRepositoryMemory implements OrderRepository {
     this.orders = []
   }
   async getByCpf(cpf: string): Promise<Order[]> {
-    return this.orders.filter(order => order.cpf.value === 'cpf')
+    return this.orders.filter(order => order.cpf.value === cpf)
   }
 
   async save(order: Order): Promise<void> {
