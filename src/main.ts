@@ -1,6 +1,7 @@
 import Checkout from "./application/Checkout"
 import GetOrdersByCpf from "./application/GetOrdersByCpf"
 import Preview from "./application/Preview"
+import SimulateFreight from "./application/SimulateFreight"
 import Coupon from "./domain/entity/Coupon"
 import Item from "./domain/entity/Item"
 import OrderController from "./infra/controller/OrderController"
@@ -25,8 +26,9 @@ couponRepository.save(new Coupon("VALE20", 20))
 const preview = new Preview(itemRepository, couponRepository)
 const checkout = new Checkout(itemRepository, orderRepository, couponRepository)
 const getOrderByCpf = new GetOrdersByCpf(orderRepository)
+const simulateFreight = new SimulateFreight(itemRepository)
 const httpServer = new ExpressAdapter()
 
-new OrderController(httpServer, preview, checkout, getOrderByCpf)
+new OrderController(httpServer, preview, checkout, getOrderByCpf, simulateFreight)
 
 httpServer.listen(3000)

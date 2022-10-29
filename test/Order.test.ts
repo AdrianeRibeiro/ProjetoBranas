@@ -69,3 +69,10 @@ test("Deve criar um pedido com frete", function() {
 
   expect(order.getTotal()).toBe(1030)
 })
+
+test("Deve criar um pedido com código", function() {
+  const order = new Order("259.556.978-37", new Date("2022-02-01T10:00:00"))
+  order.addItem(new Item(1, "Guitarra", 1000, new Dimension(100, 30, 10, 3)), 1)
+
+  expect(order.getCode()).toBe("202200000001")
+})

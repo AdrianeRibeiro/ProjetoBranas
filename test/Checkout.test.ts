@@ -149,3 +149,31 @@ test("Deve simular um pedido com frete", async function() {
   expect(orders).toHaveLength(1)
   expect(orders[0].total).toBe(6120)
 })
+
+test("Deve fazer o pedido com código", async function() {
+  const itemRepository = new ItemRepositoryMemory()
+  itemRepository.save(new Item(1, "Guitarra", 1000))
+
+  const orderRepository = new OrderRepositoryMemory()
+  const couponRepository = new CouponRepositoryMemory()
+
+  const checkout = new Checkout(itemRepository, orderRepository, couponRepository)
+  
+  const input = {
+    cpf: "317.153.361-86",
+    orderItems: [
+      { idItem: 1, quantity: 1 }
+    ],
+    date: new Date("2021-03-01T10:00:00")
+  }
+
+  await checkout.execute(input)
+  await checkout.execute(input)
+
+  const getOrderByCpf = new GetOrdersByCpf(orderRepository)
+  const orders = await getOrderByCpf.execute("317.153.361-86")
+  expect(orders).toHaveLength(2)
+  expect(orders[0].code).toBe("202100000001")
+  expect(orders[1].code).toBe("202100000002")
+})
+
