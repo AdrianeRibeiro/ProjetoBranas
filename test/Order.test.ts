@@ -50,3 +50,9 @@ test("Deve criar um pedido com 3 itens com cupom de desconto não expirado", fun
 
   expect(order.getTotal()).toBe(4872)
 })
+
+test("Não deve criar um pedido com um item com quantidade negativa", function() {
+  const order = new Order("259.556.978-37")
+
+  expect(() => order.addItem(new Item(1, "Guitarra", 1000), -1)).toThrow(new Error("Invalid quantity"))
+})
