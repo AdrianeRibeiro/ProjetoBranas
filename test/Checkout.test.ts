@@ -3,20 +3,21 @@ import GetOrdersByCpf from "../src/application/GetOrdersByCpf"
 import Coupon from "../src/domain/entity/Coupon"
 import Dimension from "../src/domain/entity/Dimension"
 import Item from "../src/domain/entity/Item"
+import MemoryRepositoryFactory from "../src/infra/factory/RepositoryFactoryMemory"
 import CouponRepositoryMemory from "../src/infra/repository/memory/CouponRepositoryMemory"
 import ItemRepositoryMemory from "../src/infra/repository/memory/ItemRepositoryMemory"
 import OrderRepositoryMemory from "../src/infra/repository/memory/OrderRepositoryMemory"
 
 test("Deve simular um pedido", async function() {
-  const itemRepository = new ItemRepositoryMemory()
+  const repositoryFactory = new MemoryRepositoryFactory()
+  const itemRepository = repositoryFactory.createItemRepository()
+  const orderRepository = repositoryFactory.createOrderRepository()
+
   itemRepository.save(new Item(1, "Guitarra", 1000))
   itemRepository.save(new Item(2, "Amplificador", 5000))
   itemRepository.save(new Item(3, "Cabo", 30))
 
-  const orderRepository = new OrderRepositoryMemory()
-  const couponRepository = new CouponRepositoryMemory()
-
-  const checkout = new Checkout(itemRepository, orderRepository, couponRepository)
+  const checkout = new Checkout(repositoryFactory)
   
   const input = {
     cpf: "317.153.361-86",
@@ -35,15 +36,17 @@ test("Deve simular um pedido", async function() {
 })
 
 test("Deve fazer o pedido com desconto", async function() {
-  const itemRepository = new ItemRepositoryMemory()
+  const repositoryFactory = new MemoryRepositoryFactory()
+  const itemRepository = repositoryFactory.createItemRepository()
+  const orderRepository = repositoryFactory.createOrderRepository()
+
   itemRepository.save(new Item(1, "Guitarra", 1000))
   itemRepository.save(new Item(2, "Amplificador", 5000))
   itemRepository.save(new Item(3, "Cabo", 30))
 
-  const orderRepository = new OrderRepositoryMemory()
-  const couponRepository = new CouponRepositoryMemory()
+  const couponRepository = repositoryFactory.createCouponRepository()
   couponRepository.save(new Coupon("VALE20", 20))
-  const checkout = new Checkout(itemRepository, orderRepository, couponRepository)
+  const checkout = new Checkout(repositoryFactory)
   
   const input = {
     cpf: "317.153.361-86",
@@ -64,16 +67,18 @@ test("Deve fazer o pedido com desconto", async function() {
 })
 
 test("Deve fazer o pedido com desconto expirado", async function() {
-  const itemRepository = new ItemRepositoryMemory()
+  const repositoryFactory = new MemoryRepositoryFactory()
+  const itemRepository = repositoryFactory.createItemRepository()
+  const orderRepository = repositoryFactory.createOrderRepository()
+
   itemRepository.save(new Item(1, "Guitarra", 1000))
   itemRepository.save(new Item(2, "Amplificador", 5000))
   itemRepository.save(new Item(3, "Cabo", 30))
 
-  const orderRepository = new OrderRepositoryMemory()
-  const couponRepository = new CouponRepositoryMemory()
+  const couponRepository = repositoryFactory.createCouponRepository()
   couponRepository.save(new Coupon("VALE20", 20, new Date("2021-03-01T10:00:00")))
-  const checkout = new Checkout(itemRepository, orderRepository, couponRepository)
   
+  const checkout = new Checkout(repositoryFactory)
   const input = {
     cpf: "317.153.361-86",
     orderItems: [
@@ -94,16 +99,18 @@ test("Deve fazer o pedido com desconto expirado", async function() {
 
 
 test("Deve fazer o pedido com desconto não expirado", async function() {
-  const itemRepository = new ItemRepositoryMemory()
+  const repositoryFactory = new MemoryRepositoryFactory()
+  const itemRepository = repositoryFactory.createItemRepository()
+  const orderRepository = repositoryFactory.createOrderRepository()
+
   itemRepository.save(new Item(1, "Guitarra", 1000))
   itemRepository.save(new Item(2, "Amplificador", 5000))
   itemRepository.save(new Item(3, "Cabo", 30))
 
-  const orderRepository = new OrderRepositoryMemory()
-  const couponRepository = new CouponRepositoryMemory()
+  const couponRepository = repositoryFactory.createCouponRepository()
   couponRepository.save(new Coupon("VALE20", 20, new Date("2022-03-01T10:00:00")))
-  const checkout = new Checkout(itemRepository, orderRepository, couponRepository)
   
+  const checkout = new Checkout(repositoryFactory)
   const input = {
     cpf: "317.153.361-86",
     orderItems: [
@@ -124,16 +131,15 @@ test("Deve fazer o pedido com desconto não expirado", async function() {
 
 
 test("Deve simular um pedido com frete", async function() {
-  const itemRepository = new ItemRepositoryMemory()
+  const repositoryFactory = new MemoryRepositoryFactory()
+  const itemRepository = repositoryFactory.createItemRepository()
+  const orderRepository = repositoryFactory.createOrderRepository()
+
   itemRepository.save(new Item(1, "Guitarra", 1000, new Dimension(100, 30, 10, 3)))
   itemRepository.save(new Item(2, "Amplificador", 5000))
   itemRepository.save(new Item(3, "Cabo", 30))
 
-  const orderRepository = new OrderRepositoryMemory()
-  const couponRepository = new CouponRepositoryMemory()
-
-  const checkout = new Checkout(itemRepository, orderRepository, couponRepository)
-  
+  const checkout = new Checkout(repositoryFactory)
   const input = {
     cpf: "317.153.361-86",
     orderItems: [
@@ -151,14 +157,13 @@ test("Deve simular um pedido com frete", async function() {
 })
 
 test("Deve fazer o pedido com código", async function() {
-  const itemRepository = new ItemRepositoryMemory()
+  const repositoryFactory = new MemoryRepositoryFactory()
+  const itemRepository = repositoryFactory.createItemRepository()
+  const orderRepository = repositoryFactory.createOrderRepository()
+
   itemRepository.save(new Item(1, "Guitarra", 1000))
 
-  const orderRepository = new OrderRepositoryMemory()
-  const couponRepository = new CouponRepositoryMemory()
-
-  const checkout = new Checkout(itemRepository, orderRepository, couponRepository)
-  
+  const checkout = new Checkout(repositoryFactory)
   const input = {
     cpf: "317.153.361-86",
     orderItems: [

@@ -6,6 +6,7 @@ import Coupon from "./domain/entity/Coupon"
 import Item from "./domain/entity/Item"
 import OrderController from "./infra/controller/OrderController"
 import PgPromiseAdapter from "./infra/database/PgPromiseAdapter"
+import MemoryRepositoryFactory from "./infra/factory/RepositoryFactoryMemory"
 import ExpressAdapter from "./infra/http/ExpressAdapter"
 import CouponRepositoryMemory from "./infra/repository/memory/CouponRepositoryMemory"
 import ItemRepositoryDatabase from "./infra/repository/memory/database/ItemRepositoryDatabase"
@@ -23,8 +24,11 @@ const itemRepository = new ItemRepositoryDatabase(connection)
 const orderRepository = new OrderRepositoryMemory()
 const couponRepository = new CouponRepositoryMemory()
 couponRepository.save(new Coupon("VALE20", 20))
+
+const repositoryFactory = new MemoryRepositoryFactory()
+
 const preview = new Preview(itemRepository, couponRepository)
-const checkout = new Checkout(itemRepository, orderRepository, couponRepository)
+const checkout = new Checkout(repositoryFactory)
 const getOrderByCpf = new GetOrdersByCpf(orderRepository)
 const simulateFreight = new SimulateFreight(itemRepository)
 const httpServer = new ExpressAdapter()
