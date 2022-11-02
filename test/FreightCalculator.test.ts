@@ -17,3 +17,10 @@ test("Deve calcular o frete mínimo", function() {
   const freight = FreightCalculator.calculate(item)
   expect(freight).toBe(10)
 })
+
+test("Deve calcular o frete com distância", function() {
+  const item = new Item(3, "Cabo", 30, new Dimension(100, 30, 10, 3))
+  const distance = 748.22
+  const freight = FreightCalculator.calculate(item, distance)
+  expect(freight).toBe(22.4466)
+})

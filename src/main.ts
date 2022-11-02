@@ -10,6 +10,7 @@ import MemoryRepositoryFactory from "./infra/factory/RepositoryFactoryMemory"
 import ExpressAdapter from "./infra/http/ExpressAdapter"
 import CouponRepositoryMemory from "./infra/repository/memory/CouponRepositoryMemory"
 import ItemRepositoryDatabase from "./infra/repository/memory/database/ItemRepositoryDatabase"
+import ZipCodeRepositoryDatabase from "./infra/repository/memory/database/ZipCodeRepositoryDatabase"
 import ItemRepositoryMemory from "./infra/repository/memory/ItemRepositoryMemory"
 import OrderRepositoryMemory from "./infra/repository/memory/OrderRepositoryMemory"
 
@@ -30,7 +31,10 @@ const repositoryFactory = new MemoryRepositoryFactory()
 const preview = new Preview(itemRepository, couponRepository)
 const checkout = new Checkout(repositoryFactory)
 const getOrderByCpf = new GetOrdersByCpf(orderRepository)
-const simulateFreight = new SimulateFreight(itemRepository)
+
+const zipCodeRepository = new ZipCodeRepositoryDatabase(connection) 
+const simulateFreight = new SimulateFreight(itemRepository, zipCodeRepository)
+
 const httpServer = new ExpressAdapter()
 
 new OrderController(httpServer, preview, checkout, getOrderByCpf, simulateFreight)
