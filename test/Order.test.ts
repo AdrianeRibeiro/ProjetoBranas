@@ -66,7 +66,7 @@ test("Não deve criar um pedido com um item repetido", function() {
 test("Deve criar um pedido com frete", function() {
   const order = new Order("259.556.978-37")
   order.addItem(new Item(1, "Guitarra", 1000, new Dimension(100, 30, 10, 3)), 1)
-
+  order.freight = 30
   expect(order.getTotal()).toBe(1030)
 })
 

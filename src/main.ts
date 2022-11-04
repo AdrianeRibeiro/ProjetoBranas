@@ -27,12 +27,11 @@ const couponRepository = new CouponRepositoryMemory()
 couponRepository.save(new Coupon("VALE20", 20))
 
 const repositoryFactory = new MemoryRepositoryFactory()
+const zipCodeRepository = new ZipCodeRepositoryDatabase(connection) 
 
-const preview = new Preview(itemRepository, couponRepository)
+const preview = new Preview(itemRepository, couponRepository, zipCodeRepository)
 const checkout = new Checkout(repositoryFactory)
 const getOrderByCpf = new GetOrdersByCpf(orderRepository)
-
-const zipCodeRepository = new ZipCodeRepositoryDatabase(connection) 
 const simulateFreight = new SimulateFreight(itemRepository, zipCodeRepository)
 
 const httpServer = new ExpressAdapter()
