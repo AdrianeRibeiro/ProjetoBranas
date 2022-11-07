@@ -1,7 +1,7 @@
-import Coord from "../../../../domain/entity/Coord";
-import ZipCode from "../../../../domain/entity/ZipCode";
-import ZipCodeRepository from "../../../../domain/repository/ZipCodeRepository";
-import Connection from "../../../database/Connection";
+import Coord from "../../../domain/entity/Coord";
+import ZipCode from "../../../domain/entity/ZipCode";
+import ZipCodeRepository from "../../../domain/repository/ZipCodeRepository";
+import Connection from "../../database/Connection";
 
 export default class ZipCodeRepositoryDatabase implements ZipCodeRepository {
 
