@@ -3,22 +3,21 @@ import GetOrdersByCpf from "../src/application/GetOrdersByCpf"
 import Coupon from "../src/domain/entity/Coupon"
 import Dimension from "../src/domain/entity/Dimension"
 import Item from "../src/domain/entity/Item"
+import DatabaseRepositoryFactory from "../src/domain/factory/DatabaseRepositoryFactory"
+import PgPromiseAdapter from "../src/infra/database/PgPromiseAdapter"
 import MemoryRepositoryFactory from "../src/infra/factory/RepositoryFactoryMemory"
 import CouponRepositoryMemory from "../src/infra/repository/memory/CouponRepositoryMemory"
 import ItemRepositoryMemory from "../src/infra/repository/memory/ItemRepositoryMemory"
 import OrderRepositoryMemory from "../src/infra/repository/memory/OrderRepositoryMemory"
 
 test("Deve simular um pedido", async function() {
-  const repositoryFactory = new MemoryRepositoryFactory()
-  const itemRepository = repositoryFactory.createItemRepository()
-  const orderRepository = repositoryFactory.createOrderRepository()
+  const connection = new PgPromiseAdapter()
+  const repositoryFactory = new DatabaseRepositoryFactory(connection)
 
-  itemRepository.save(new Item(1, "Guitarra", 1000))
-  itemRepository.save(new Item(2, "Amplificador", 5000))
-  itemRepository.save(new Item(3, "Cabo", 30))
+  const orderRepository = repositoryFactory.createOrderRepository()
+  orderRepository.clear()
 
   const checkout = new Checkout(repositoryFactory)
-  
   const input = {
     cpf: "317.153.361-86",
     orderItems: [
@@ -32,7 +31,8 @@ test("Deve simular um pedido", async function() {
   const getOrderByCpf = new GetOrdersByCpf(orderRepository)
   const orders = await getOrderByCpf.execute("317.153.361-86")
   expect(orders).toHaveLength(1)
-  expect(orders[0].total).toBe(6090)
+  expect(orders[0].total).toBe(6350)
+  await connection.close()
 })
 
 test("Deve fazer o pedido com desconto", async function() {

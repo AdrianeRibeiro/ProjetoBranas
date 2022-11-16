@@ -10,12 +10,12 @@ export default class OrderRepositoryDatabase implements OrderRepository {
   constructor(readonly connection: Connection) {}
 
   async save(order: Order): Promise<void> {
-    //begin
-    await this.connection.query("insert into ccca.order (code, cpf, issue_date) values ($1, $2, $3)", [order.getCode(), order.cpf.value, order.date])
+    const [orderData] = await this.connection.query("insert into ccca.order (code, cpf, issue_date, sequence, freight) values ($1, $2, $3, $4, $5) returning *", 
+      [order.getCode(), order.cpf.value, order.date, order.sequence, order.freight]
+    )
     for (const orderItem of order.orderItems) {
-      await this.connection.query("insert into ccca.order_item (id_item, id_order, price, quantity) values ($1, $2, $3 $4)", [])
+      await this.connection.query("insert into ccca.order_item (id_item, id_order, price, quantity) values ($1, $2, $3 $4)", [orderItem.idItem, orderData.id_order, orderItem.price, orderItem.quantity])
     }
-    //commit
   }
 
   async getByCpf(cpf: string): Promise<Order[]> {
@@ -24,7 +24,7 @@ export default class OrderRepositoryDatabase implements OrderRepository {
 
     for(const orderData of ordersData) {
       const order = new Order(orderData.cpf, orderData.issue_date, orderData.sequence)
-      const [orderItemsData] = await this.connection.query("select * from ccca.order_item where id_order = $1", orderData.id_order)
+      const orderItemsData = await this.connection.query("select * from ccca.order_item where id_order = $1", orderData.id_order)
       for (const orderItemData of orderItemsData) {
         order.orderItems.push(new OrderItem(orderItemData.id_item, parseFloat(orderItemData.price), orderItemData.quantity, new Dimension(orderItemsData.width, orderItemsData.height, orderItemsData.length, orderItemsData.weight)))
       }
@@ -39,7 +39,13 @@ export default class OrderRepositoryDatabase implements OrderRepository {
     return orders
   }
 
-  count(): Promise<number> {
-    throw new Error("Method not implemented.");
+  async count(): Promise<number> {
+    const [options] = await this.connection.query("select count(*)::integer as count from ccca.order", [])
+    return options.count
+  }
+
+  async clear(): Promise<void> {
+    await this.connection.query("delete from ccca.order_item", [])
+    await this.connection.query("delete from ccca.order", [])
   }
 }
