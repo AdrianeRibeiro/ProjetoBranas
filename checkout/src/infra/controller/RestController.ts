@@ -4,7 +4,7 @@ import Preview from "../../application/Preview";
 import SimulateFreight from "../../application/SimulateFreight";
 import HttpServer from "../http/HttpServer";
 
-export default class OrderController {
+export default class RestController {
 
   constructor(
     readonly httpServer: HttpServer, 

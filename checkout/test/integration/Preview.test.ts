@@ -1,12 +1,10 @@
-import Preview from "../src/application/Preview"
-import Coord from "../src/domain/entity/Coord"
-import Coupon from "../src/domain/entity/Coupon"
-import Dimension from "../src/domain/entity/Dimension"
-import Item from "../src/domain/entity/Item"
-import ZipCode from "../src/domain/entity/ZipCode"
-import CouponRepositoryMemory from "../src/infra/repository/memory/CouponRepositoryMemory"
-import ItemRepositoryMemory from "../src/infra/repository/memory/ItemRepositoryMemory"
-import ZipCodeRepositoryMemory from "../src/infra/repository/memory/ZipCodeRepositoryMemory"
+import CalculateFreightGateway from "../../src/application/gateway/CalculateFreightGateway"
+import Preview from "../../src/application/Preview"
+import Coupon from "../../src/domain/entity/Coupon"
+import Dimension from "../../src/domain/entity/Dimension"
+import Item from "../../src/domain/entity/Item"
+import CouponRepositoryMemory from "../../src/infra/repository/memory/CouponRepositoryMemory"
+import ItemRepositoryMemory from "../../src/infra/repository/memory/ItemRepositoryMemory"
 
 let preview: Preview
 
@@ -19,11 +17,15 @@ beforeEach(function() {
   const couponRepository = new CouponRepositoryMemory()
   couponRepository.save(new Coupon("VALE20", 20))
 
-  const zipCodeRepository = new ZipCodeRepositoryMemory()
-  zipCodeRepository.save(new ZipCode("88015600", "Rua Almirante Lamego", "Centro", new Coord(-27.5945, -48.5477)))
-  zipCodeRepository.save(new ZipCode("22060030", "Rua Aires Saldanha", "Copacabana", new Coord(-22.9129, -43.2003)))
-
-  preview = new Preview(itemRepository, couponRepository, zipCodeRepository)
+  const calculateFreightGateway: CalculateFreightGateway = {
+    async calculate(
+      orderItems: { volume: number, density: number, quantity: number }[],
+      from?: string,
+      to?: string) {
+      return 202.09
+    }
+  }
+  preview = new Preview(itemRepository, couponRepository, calculateFreightGateway)
 })
 
 test("Deve simular um pedido", async function() {
@@ -33,15 +35,16 @@ test("Deve simular um pedido", async function() {
       { idItem: 1, quantity: 1 },
       { idItem: 2, quantity: 1 },
       { idItem: 3, quantity: 3 },
-    ]
+    ],
+    from: "88015600",
+    to: "22060030"
   }
 
   const total = await preview.execute(input)
-  expect(total).toBe(6090)
+  expect(total).toBe(6292.09);
 })
 
 test("Deve simular um pedido com desconto", async function() {
-
   const input = {
     cpf: "317.153.361-86",
     orderItems: [
@@ -49,13 +52,14 @@ test("Deve simular um pedido com desconto", async function() {
       { idItem: 2, quantity: 1 },
       { idItem: 3, quantity: 3 },
     ],
-    coupon: "VALE20"
+    coupon: "VALE20",
+    from: "88015600",
+    to: "22060030"
   }
 
   const total = await preview.execute(input)
-  expect(total).toBe(4872)
+  expect(total).toBe(5074.09);
 })
-
 
 test("Deve simular um pedido com distância", async function() {
   const itemRepository = new ItemRepositoryMemory()
@@ -65,12 +69,6 @@ test("Deve simular um pedido com distância", async function() {
 
   const couponRepository = new CouponRepositoryMemory()
   couponRepository.save(new Coupon("VALE20", 20))
-
-  const zipCodeRepository = new ZipCodeRepositoryMemory()
-  zipCodeRepository.save(new ZipCode("88015600", "Rua Almirante Lamego", "Centro", new Coord(-27.5945, -48.5477)))
-  zipCodeRepository.save(new ZipCode("22060030", "Rua Aires Saldanha", "Copacabana", new Coord(-22.9129, -43.2003)))
-
-  preview = new Preview(itemRepository, couponRepository, zipCodeRepository)
   
   const input = {
     cpf: "317.153.361-86",
@@ -85,5 +83,5 @@ test("Deve simular um pedido com distância", async function() {
   }
 
   const total = await preview.execute(input)
-  expect(total).toBe(5334.0905999999995)
+  expect(total).toBe(5074.09)
 })

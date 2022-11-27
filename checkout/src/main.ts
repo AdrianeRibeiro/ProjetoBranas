@@ -4,7 +4,7 @@ import Preview from "./application/Preview"
 import SimulateFreight from "./application/SimulateFreight"
 import Coupon from "./domain/entity/Coupon"
 import Item from "./domain/entity/Item"
-import OrderController from "./infra/controller/OrderController"
+import OrderController from "./infra/controller/RestController"
 import PgPromiseAdapter from "./infra/database/PgPromiseAdapter"
 import MemoryRepositoryFactory from "./infra/factory/RepositoryFactoryMemory"
 import ExpressAdapter from "./infra/http/ExpressAdapter"
@@ -13,6 +13,8 @@ import ItemRepositoryDatabase from "./infra/repository/database/ItemRepositoryDa
 import ZipCodeRepositoryDatabase from "./infra/repository/database/ZipCodeRepositoryDatabase"
 import ItemRepositoryMemory from "./infra/repository/memory/ItemRepositoryMemory"
 import OrderRepositoryMemory from "./infra/repository/memory/OrderRepositoryMemory"
+import CalculateFreightGateway from "./application/gateway/CalculateFreightGateway"
+import CalculateFreightHttpGateway from "./infra/gateway/CalculateFreightHttpGateway"
 
 /*const itemRepository = new ItemRepositoryMemory()
 itemRepository.save(new Item(1, "Guitarra", 1000))
@@ -29,7 +31,8 @@ couponRepository.save(new Coupon("VALE20", 20))
 const repositoryFactory = new MemoryRepositoryFactory()
 const zipCodeRepository = new ZipCodeRepositoryDatabase(connection) 
 
-const preview = new Preview(itemRepository, couponRepository, zipCodeRepository)
+const calculateFreightGateway = new CalculateFreightHttpGateway()
+const preview = new Preview(itemRepository, couponRepository, calculateFreightGateway)
 const checkout = new Checkout(repositoryFactory)
 const getOrderByCpf = new GetOrdersByCpf(orderRepository)
 const simulateFreight = new SimulateFreight(itemRepository, zipCodeRepository)
