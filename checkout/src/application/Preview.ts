@@ -1,15 +1,12 @@
-import ItemRepository from "../domain/repository/ItemRepository"
 import Order from "../domain/entity/Order"
 import CouponRepository from "../domain/repository/CouponRepository"
-import FreightCalculator from "../domain/entity/FreightCalculator"
-import ZipCodeRepository from "../domain/repository/ZipCodeRepository"
-import DistanceCalculator from "../domain/entity/DistanceCalculator"
 import CalculateFreightGateway from "./gateway/CalculateFreightGateway"
+import GetItemGateway from "./gateway/GetItemGateway"
 
 export default class Preview {
   constructor(
-    readonly itemRepository: ItemRepository, 
     readonly couponRepository: CouponRepository, 
+    readonly getItemGateway: GetItemGateway,
     readonly calculateFreightGateway: CalculateFreightGateway
   ) {}
 
@@ -18,7 +15,7 @@ export default class Preview {
     const order = new Order(input.cpf, input.date)
 
     for (const orderItem of input.orderItems) {
-      const item = await this.itemRepository.getItem(orderItem.idItem)
+      const item = await this.getItemGateway.getItem(orderItem.idItem)
       order.addItem(item, orderItem.quantity)
       orderItems.push({ volume: item.getVolume(), density: item.getDensity(), quantity: orderItem.quantity })
     }

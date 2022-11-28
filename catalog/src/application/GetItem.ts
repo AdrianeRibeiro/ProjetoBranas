@@ -12,7 +12,11 @@ export default class SimulateFreight {
       description: item.description,
       price: item.price,
       volume: item.getVolume(),
-      density: item.getDensity()
+      density: item.getDensity(),
+      width: item.dimension?.width,
+      height: item.dimension?.height,
+      length: item.dimension?.length,
+      weight: item.dimension?.weight 
     }
   }
 }
@@ -22,5 +26,9 @@ type Output = {
   description: string,
   price: number,
   volume: number,
-  density: number
+  density: number,
+  width?: number,
+  height?: number,
+  length?: number,
+  weight?: number 
 }
