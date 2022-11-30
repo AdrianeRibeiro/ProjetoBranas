@@ -3,17 +3,13 @@ import Preview from "../../src/application/Preview"
 import Coupon from "../../src/domain/entity/Coupon"
 import Dimension from "../../src/domain/entity/Dimension"
 import Item from "../../src/domain/entity/Item"
+import GetItemHttpGateway from "../../src/infra/gateway/GetItemHttpGateway"
 import CouponRepositoryMemory from "../../src/infra/repository/memory/CouponRepositoryMemory"
 import ItemRepositoryMemory from "../../src/infra/repository/memory/ItemRepositoryMemory"
 
 let preview: Preview
 
 beforeEach(function() {
-  const itemRepository = new ItemRepositoryMemory()
-  itemRepository.save(new Item(1, "Guitarra", 1000))
-  itemRepository.save(new Item(2, "Amplificador", 5000))
-  itemRepository.save(new Item(3, "Cabo", 30))
-
   const couponRepository = new CouponRepositoryMemory()
   couponRepository.save(new Coupon("VALE20", 20))
 
@@ -25,7 +21,8 @@ beforeEach(function() {
       return 202.09
     }
   }
-  preview = new Preview(itemRepository, couponRepository, calculateFreightGateway)
+  const getItemGateway = new GetItemHttpGateway()
+  preview = new Preview(couponRepository, getItemGateway, calculateFreightGateway)
 })
 
 test("Deve simular um pedido", async function() {
@@ -69,6 +66,17 @@ test("Deve simular um pedido com distância", async function() {
 
   const couponRepository = new CouponRepositoryMemory()
   couponRepository.save(new Coupon("VALE20", 20))
+
+  const calculateFreightGateway: CalculateFreightGateway = {
+    async calculate(
+      orderItems: { volume: number, density: number, quantity: number }[],
+      from?: string,
+      to?: string) {
+      return 202.09
+    }
+  }
+  const getItemGateway = new GetItemHttpGateway()
+  preview = new Preview(couponRepository, getItemGateway, calculateFreightGateway)
   
   const input = {
     cpf: "317.153.361-86",

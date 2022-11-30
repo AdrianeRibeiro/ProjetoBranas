@@ -1,0 +1,17 @@
+version: '3'
+services:
+  db:
+    user: root
+    image: postgres:14.1-alpine
+    restart: always
+    environment:
+      - POSTGRES_DB=ccca
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    ports:
+      - '5432:5432'
+    volumes:
+      - "./data/postgres:/var/lib/postgresql/data"
+
+    # const url = "postgres://postgres:postgres@localhost:5432/ccca"
+    # const connection = pgp()(url)
