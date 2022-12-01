@@ -1,11 +1,16 @@
 import DecrementStock from "../../src/application/DecrementStock"
 import GetStock from "../../src/application/GetStock"
 import StockEntry from "../../src/domain/entity/StockEntry"
+import PgPromiseAdapter from "../../src/infra/database/PgPromiseAdapter"
+import StockRepositoryDatabase from "../../src/infra/repository/database/StockRepositoryDatabase"
 import StockRepositoryMemory from "../../src/infra/repository/memory/StockRepositoryMemory"
 
 test("Deve decrementar o estoque", async function() {
-  const stockRepository = new StockRepositoryMemory()
-  stockRepository.save(new StockEntry(1, "in", 20))
+  const connection = new PgPromiseAdapter()
+  const stockRepository = new StockRepositoryDatabase(connection)
+  await stockRepository.clear()
+  //const stockRepository = new StockRepositoryMemory()
+  await stockRepository.save(new StockEntry(1, "in", 20))
 
   const decrementStock = new DecrementStock(stockRepository)
   const input = {
@@ -18,4 +23,5 @@ test("Deve decrementar o estoque", async function() {
   const getStock = new GetStock(stockRepository)
   const output = await getStock.execute(1)
   expect(output.total).toBe(10)
+  await connection.close()
 })

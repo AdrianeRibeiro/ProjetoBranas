@@ -12,6 +12,3 @@ services:
       - '5432:5432'
     volumes:
       - "./data/postgres:/var/lib/postgresql/data"
-
-    # const url = "postgres://postgres:postgres@localhost:5432/ccca"
-    # const connection = pgp()(url)

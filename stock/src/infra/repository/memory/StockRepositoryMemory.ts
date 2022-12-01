@@ -15,4 +15,8 @@ export default class StockRepositoryMemory implements StockRepository {
   async save(stockEntry: StockEntry): Promise<void> {
     this.stockEntries.push(stockEntry)
   }
+
+  async clear(): Promise<void> {
+    this.stockEntries = []
+  }
 }

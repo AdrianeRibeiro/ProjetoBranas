@@ -1,15 +1,22 @@
-import CalculateFreight from "../../application/CalculateFreight";
+import DecrementStock from "../../application/DecrementStock";
+import GetStock from "../../application/GetStock";
 import HttpServer from "../http/HttpServer";
 
 export default class RestController {
 
   constructor(
     readonly httpServer: HttpServer, 
-    readonly calculateFreight: CalculateFreight
+    readonly decrementStock: DecrementStock,
+    readonly getStock: GetStock
   ) {
-    httpServer.on("post", "/calculateFreight", async function(params: any, body: any) {
-      const freight = await calculateFreight.execute(body)
-      return freight
+
+    httpServer.on("post", "/decremetStock", async function(params: any, body: any) {
+      await decrementStock.execute(body)
+    })
+
+    httpServer.on("post", "/getStock/:idItem", async function(params: any, body: any) {
+      const output = await getStock.execute(params.idItem)
+      return output
     })
   }
 }

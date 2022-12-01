@@ -30,7 +30,7 @@ test("Deve simular o frete calculando a distancia", async function() {
     to: "22060030"
   }
   const freight = await calculateFreight.execute(input)
-  expect(freight).toBe(22.45)
+  expect(freight).toBe(22.4466)
 
   await connection.close()
 })
