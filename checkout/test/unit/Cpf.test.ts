@@ -1,4 +1,4 @@
-import Cpf from "../src/domain/entity/Cpf"
+import Cpf from "../../src/domain/entity/Cpf"
 
 test("Deve validar o cpf válido que tem dígito maior que 0", function() {
   const cpf = new Cpf("259.556.978-37")
