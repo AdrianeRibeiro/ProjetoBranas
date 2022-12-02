@@ -1,13 +1,15 @@
 import axios from "axios"
 
-test.skip("Deve testar o calculteFreight pela API", async function() {
+test("Deve decrementar o estoque", async function() {
+  await axios.post('http://localhost:3003/clearStock')
   const input = {
-    orderItems: [
-      { volume: 0.03, density: 100, quantity: 1 }
-    ],
+   idItem: 1,
+   quantity: 10
   }
 
-  const response = await axios.post('http://localhost:3001/calculteFreight', input)
-  const preview = response.data
-  expect(preview.total).toBe(30)
+  await axios.post('http://localhost:3003/decrementStock', input)
+  const response = await axios.post('http://localhost:3003/getStock/1')
+
+  const output = response.data
+  expect(output.total).toBe(-10)
 })

@@ -1,17 +1,22 @@
-import ItemRepository from "../domain/repository/ItemRepository"
 import Order from "../domain/entity/Order"
 import OrderRepository from "../domain/repository/OrderRepository"
 import CouponRepository from "../domain/repository/CouponRepository"
 import RepositoryFactory from "../domain/factory/RepositoryFactory"
 import FreightCalculator from "../domain/entity/FreightCalculator"
+import GetItemGateway from "./gateway/GetItemGateway"
+import CalculateFreightGateway from "./gateway/CalculateFreightGateway"
+import DecrementStockGateway from "./gateway/DecrementStockGateway"
 
 export default class Checkout {
-  itemRepository: ItemRepository
   couponRepository: CouponRepository
   orderRepository: OrderRepository
 
-  constructor(repositoryFactory: RepositoryFactory) {
-    this.itemRepository = repositoryFactory.createItemRepository()
+  constructor(
+    repositoryFactory: RepositoryFactory,
+    readonly getItemGateway: GetItemGateway,
+    readonly calculateFreightGateway: CalculateFreightGateway,
+    readonly decrementStockGateway: DecrementStockGateway
+  ) {
     this.couponRepository = repositoryFactory.createCouponRepository()
     this.orderRepository = repositoryFactory.createOrderRepository()
   }
@@ -19,11 +24,16 @@ export default class Checkout {
   async execute(input: Input): Promise<void> {
     const sequence = (await this.orderRepository.count()) + 1
     const order = new Order(input.cpf, input.date, sequence)
+    const orderItems = []
+
     for (const orderItem of input.orderItems) {
-      const item = await this.itemRepository.getItem(orderItem.idItem)
+      const item = await this.getItemGateway.getItem(orderItem.idItem)
       order.addItem(item, orderItem.quantity)
-      order.freight += FreightCalculator.calculate(item) * orderItem.quantity
+      orderItems.push({ volume: item.getVolume(), density: item.getDensity(), quantity: orderItem.quantity })
+      await this.decrementStockGateway.execute(orderItem.idItem, orderItem.quantity)
     }
+
+    order.freight = await this.calculateFreightGateway.calculate(orderItems, input.from, input.to)
 
     if(input.coupon) {
       const coupon = await this.couponRepository.getCoupon(input.coupon)
@@ -37,5 +47,7 @@ type Input = {
   cpf: string,
   orderItems: { idItem: number, quantity: number }[],
   coupon?: string,
-  date?: Date
+  date?: Date,
+  from?: string,
+  to?: string
 }

@@ -16,6 +16,7 @@ import OrderRepositoryMemory from "./infra/repository/memory/OrderRepositoryMemo
 import CalculateFreightGateway from "./application/gateway/CalculateFreightGateway"
 import CalculateFreightHttpGateway from "./infra/gateway/CalculateFreightHttpGateway"
 import GetItemHttpGateway from "./infra/gateway/GetItemHttpGateway"
+import DecrementStockHttpGateway from "./infra/gateway/DecrementStockHttpGateway"
 
 /*const itemRepository = new ItemRepositoryMemory()
 itemRepository.save(new Item(1, "Guitarra", 1000))
@@ -34,8 +35,10 @@ const zipCodeRepository = new ZipCodeRepositoryDatabase(connection)
 
 const getItemGateway = new GetItemHttpGateway()
 const calculateFreightGateway = new CalculateFreightHttpGateway()
+const decrementStockGateway = new DecrementStockHttpGateway()
+
 const preview = new Preview(couponRepository, getItemGateway, calculateFreightGateway)
-const checkout = new Checkout(repositoryFactory)
+const checkout = new Checkout(repositoryFactory, getItemGateway, calculateFreightGateway, decrementStockGateway)
 const getOrderByCpf = new GetOrdersByCpf(orderRepository)
 const simulateFreight = new SimulateFreight(itemRepository, zipCodeRepository)
 
