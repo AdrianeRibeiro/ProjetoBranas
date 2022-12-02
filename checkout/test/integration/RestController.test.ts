@@ -1,6 +1,6 @@
 import axios from "axios"
 
-test.skip("Deve testar o preview pela API", async function() {
+test("Deve testar o preview pela API", async function() {
   const input = {
     cpf: "317.153.361-86",
     orderItems: [
@@ -15,7 +15,7 @@ test.skip("Deve testar o preview pela API", async function() {
   expect(preview.total).toBe(6350)
 })
 
-test.skip("Deve testar o preview com desconto pela API", async function() {
+test("Deve testar o preview com desconto pela API", async function() {
   const input = {
     cpf: "317.153.361-86",
     orderItems: [
@@ -29,16 +29,4 @@ test.skip("Deve testar o preview com desconto pela API", async function() {
   const response = await axios.post('http://localhost:3000/preview', input)
   const preview = response.data
   expect(preview.total).toBe(5132)
-})
-
-test.skip("Deve testar o simulateFreight pela API", async function() {
-  const input = {
-    orderItems: [
-      { idItem: 1, quantity: 1 }
-    ],
-  }
-
-  const response = await axios.post('http://localhost:3000/simulateFreight', input)
-  const preview = response.data
-  expect(preview.total).toBe(30)
 })
