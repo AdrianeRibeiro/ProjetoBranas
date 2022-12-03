@@ -1,7 +1,8 @@
-import Order from "../domain/entity/Order"
-import CouponRepository from "../domain/repository/CouponRepository"
-import CalculateFreightGateway from "./gateway/CalculateFreightGateway"
-import GetItemGateway from "./gateway/GetItemGateway"
+import Order from "../../domain/entity/Order"
+import CouponRepository from "../../domain/repository/CouponRepository"
+import CalculateFreightGateway from "../gateway/CalculateFreightGateway"
+import GetItemGateway from "../gateway/GetItemGateway"
+
 
 export default class Preview {
   constructor(

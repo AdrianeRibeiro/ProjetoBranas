@@ -1,6 +1,6 @@
 [x] conectar no banco
 [] corrigir testes quebrando
-  - [] checkout
+  - [] checkout integration
 [] DDD readme
 [] limpar checkout
 

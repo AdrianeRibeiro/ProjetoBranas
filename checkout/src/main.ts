@@ -1,7 +1,3 @@
-import Checkout from "./application/Checkout"
-import GetOrdersByCpf from "./application/GetOrdersByCpf"
-import Preview from "./application/Preview"
-import SimulateFreight from "./application/SimulateFreight"
 import Coupon from "./domain/entity/Coupon"
 import Item from "./domain/entity/Item"
 import OrderController from "./infra/controller/RestController"
@@ -10,13 +6,15 @@ import MemoryRepositoryFactory from "./infra/factory/RepositoryFactoryMemory"
 import ExpressAdapter from "./infra/http/ExpressAdapter"
 import CouponRepositoryMemory from "./infra/repository/memory/CouponRepositoryMemory"
 import ItemRepositoryDatabase from "./infra/repository/database/ItemRepositoryDatabase"
-import ZipCodeRepositoryDatabase from "./infra/repository/database/ZipCodeRepositoryDatabase"
 import ItemRepositoryMemory from "./infra/repository/memory/ItemRepositoryMemory"
 import OrderRepositoryMemory from "./infra/repository/memory/OrderRepositoryMemory"
 import CalculateFreightGateway from "./application/gateway/CalculateFreightGateway"
 import CalculateFreightHttpGateway from "./infra/gateway/CalculateFreightHttpGateway"
 import GetItemHttpGateway from "./infra/gateway/GetItemHttpGateway"
 import DecrementStockHttpGateway from "./infra/gateway/DecrementStockHttpGateway"
+import Preview from "./application/usecase/Preview"
+import Checkout from "./application/usecase/Checkout"
+import GetOrdersByCpf from "./application/usecase/GetOrdersByCpf"
 
 /*const itemRepository = new ItemRepositoryMemory()
 itemRepository.save(new Item(1, "Guitarra", 1000))
@@ -31,7 +29,6 @@ const couponRepository = new CouponRepositoryMemory()
 couponRepository.save(new Coupon("VALE20", 20))
 
 const repositoryFactory = new MemoryRepositoryFactory()
-const zipCodeRepository = new ZipCodeRepositoryDatabase(connection) 
 
 const getItemGateway = new GetItemHttpGateway()
 const calculateFreightGateway = new CalculateFreightHttpGateway()
@@ -40,10 +37,8 @@ const decrementStockGateway = new DecrementStockHttpGateway()
 const preview = new Preview(couponRepository, getItemGateway, calculateFreightGateway)
 const checkout = new Checkout(repositoryFactory, getItemGateway, calculateFreightGateway, decrementStockGateway)
 const getOrderByCpf = new GetOrdersByCpf(orderRepository)
-const simulateFreight = new SimulateFreight(itemRepository, zipCodeRepository)
 
 const httpServer = new ExpressAdapter()
-
-new OrderController(httpServer, preview, checkout, getOrderByCpf, simulateFreight)
+//new OrderController(httpServer, preview, checkout, getOrderByCpf) ajustar
 
 httpServer.listen(3000)

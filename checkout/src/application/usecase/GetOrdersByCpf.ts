@@ -1,6 +1,4 @@
-import ItemRepository from "../domain/repository/ItemRepository"
-import Order from "../domain/entity/Order"
-import OrderRepository from "../domain/repository/OrderRepository"
+import OrderRepository from "../../domain/repository/OrderRepository"
 
 export default class GetOrdersByCpf {
   constructor(readonly orderRepository: OrderRepository) {}

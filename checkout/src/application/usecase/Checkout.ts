@@ -1,11 +1,11 @@
-import Order from "../domain/entity/Order"
-import OrderRepository from "../domain/repository/OrderRepository"
-import CouponRepository from "../domain/repository/CouponRepository"
-import RepositoryFactory from "../domain/factory/RepositoryFactory"
-import FreightCalculator from "../domain/entity/FreightCalculator"
-import GetItemGateway from "./gateway/GetItemGateway"
-import CalculateFreightGateway from "./gateway/CalculateFreightGateway"
-import DecrementStockGateway from "./gateway/DecrementStockGateway"
+import Order from "../../domain/entity/Order"
+import RepositoryFactory from "../../domain/factory/RepositoryFactory"
+import CouponRepository from "../../domain/repository/CouponRepository"
+import OrderRepository from "../../domain/repository/OrderRepository"
+import CalculateFreightGateway from "../gateway/CalculateFreightGateway"
+import DecrementStockGateway from "../gateway/DecrementStockGateway"
+import GetItemGateway from "../gateway/GetItemGateway"
+
 
 export default class Checkout {
   couponRepository: CouponRepository

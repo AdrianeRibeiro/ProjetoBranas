@@ -1,14 +1,14 @@
-import Checkout from "../../src/application/Checkout"
-import GetOrdersByCpf from "../../src/application/GetOrdersByCpf"
 import Coupon from "../../src/domain/entity/Coupon"
 import Dimension from "../../src/domain/entity/Dimension"
 import Item from "../../src/domain/entity/Item"
-import DatabaseRepositoryFactory from "../../src/domain/factory/DatabaseRepositoryFactory"
+import DatabaseRepositoryFactory from "../../src/infra/factory/DatabaseRepositoryFactory"
 import PgPromiseAdapter from "../../src/infra/database/PgPromiseAdapter"
 import MemoryRepositoryFactory from "../../src/infra/factory/RepositoryFactoryMemory"
 import CouponRepositoryMemory from "../../src/infra/repository/memory/CouponRepositoryMemory"
 import ItemRepositoryMemory from "../../src/infra/repository/memory/ItemRepositoryMemory"
 import OrderRepositoryMemory from "../../src/infra/repository/memory/OrderRepositoryMemory"
+import Checkout from "../../src/application/usecase/Checkout"
+import GetOrdersByCpf from "../../src/application/usecase/GetOrdersByCpf"
 
 test("Deve simular um pedido", async function() {
   const connection = new PgPromiseAdapter()

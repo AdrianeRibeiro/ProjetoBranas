@@ -1,5 +1,5 @@
 import Coupon from "../../src/domain/entity/Coupon"
-import ValidateCoupon from "../../src/domain/entity/ValidateCoupon"
+import ValidateCoupon from "../../src/application/usecase/ValidateCoupon"
 import CouponRepositoryMemory from "../../src/infra/repository/memory/CouponRepositoryMemory"
 
 test("Deve validar um cupom de desconto", async function() {

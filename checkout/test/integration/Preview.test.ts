@@ -1,5 +1,5 @@
 import CalculateFreightGateway from "../../src/application/gateway/CalculateFreightGateway"
-import Preview from "../../src/application/Preview"
+import Preview from "../../src/application/usecase/Preview"
 import Coupon from "../../src/domain/entity/Coupon"
 import Dimension from "../../src/domain/entity/Dimension"
 import Item from "../../src/domain/entity/Item"
