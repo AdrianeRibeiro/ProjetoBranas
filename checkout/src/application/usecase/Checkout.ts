@@ -2,6 +2,7 @@ import Order from "../../domain/entity/Order"
 import RepositoryFactory from "../../domain/factory/RepositoryFactory"
 import CouponRepository from "../../domain/repository/CouponRepository"
 import OrderRepository from "../../domain/repository/OrderRepository"
+import Queue from "../../infra/queue/Queue"
 import CalculateFreightGateway from "../gateway/CalculateFreightGateway"
 import DecrementStockGateway from "../gateway/DecrementStockGateway"
 import GetItemGateway from "../gateway/GetItemGateway"
@@ -15,7 +16,8 @@ export default class Checkout {
     repositoryFactory: RepositoryFactory,
     readonly getItemGateway: GetItemGateway,
     readonly calculateFreightGateway: CalculateFreightGateway,
-    readonly decrementStockGateway: DecrementStockGateway
+    readonly decrementStockGateway: DecrementStockGateway,
+    readonly queue: Queue
   ) {
     this.couponRepository = repositoryFactory.createCouponRepository()
     this.orderRepository = repositoryFactory.createOrderRepository()
