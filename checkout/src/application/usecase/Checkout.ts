@@ -1,4 +1,5 @@
 import Order from "../../domain/entity/Order"
+import OrderPlaced from "../../domain/event/OrderPlaced"
 import RepositoryFactory from "../../domain/factory/RepositoryFactory"
 import CouponRepository from "../../domain/repository/CouponRepository"
 import OrderRepository from "../../domain/repository/OrderRepository"
@@ -33,7 +34,6 @@ export default class Checkout {
       order.addItem(item, orderItem.quantity)
       orderItems.push({ volume: item.getVolume(), density: item.getDensity(), quantity: orderItem.quantity })
       //await this.decrementStockGateway.execute(orderItem.idItem, orderItem.quantity)
-      await this.queue.publish("checkout", { IdItem: orderItem.idItem, quantity: orderItem.quantity })
     }
 
     order.freight = await this.calculateFreightGateway.calculate(orderItems, input.from, input.to)
@@ -43,6 +43,7 @@ export default class Checkout {
       if(coupon) order.addCoupon(coupon)
     }
     await this.orderRepository.save(order)
+    await this.queue.publish("orderPlaced", new OrderPlaced(order))
   }
 } 
 

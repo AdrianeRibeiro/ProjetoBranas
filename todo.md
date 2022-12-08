@@ -3,6 +3,7 @@
   - [] checkout integration
 [x] DDD readme
 [x] limpar checkout
+[] conectar queue
 
 npx jest --runInBand
 npx nodemon src/main.ts
