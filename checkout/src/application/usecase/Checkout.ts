@@ -32,7 +32,8 @@ export default class Checkout {
       const item = await this.getItemGateway.getItem(orderItem.idItem)
       order.addItem(item, orderItem.quantity)
       orderItems.push({ volume: item.getVolume(), density: item.getDensity(), quantity: orderItem.quantity })
-      await this.decrementStockGateway.execute(orderItem.idItem, orderItem.quantity)
+      //await this.decrementStockGateway.execute(orderItem.idItem, orderItem.quantity)
+      await this.queue.publish("checkout", { IdItem: orderItem.idItem, quantity: orderItem.quantity })
     }
 
     order.freight = await this.calculateFreightGateway.calculate(orderItems, input.from, input.to)

@@ -1,7 +1,5 @@
 import amqp from "amqplib"
 
-
-
 async function init() {
   const connection = await amqp.connect('amqp://localhost')
   const channel = await connection.createChannel()
