@@ -7,7 +7,8 @@ export default class RabbitMQAdapter implements Queue {
   constructor() {}
 
   async connect(): Promise<void> {
-    this.connection = await amqp.connect("amqp://localhost");
+    const amqp_url = 'amqp://localhost:5673'
+    this.connection = await amqp.connect(amqp_url)
   }
 
   async close(): Promise<void> {

@@ -1,0 +1,1 @@
+- Rodar main: npx ts-node main.ts

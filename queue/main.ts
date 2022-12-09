@@ -1,7 +1,8 @@
 import amqp from "amqplib"
 
 async function init() {
-  const connection = await amqp.connect('amqp://localhost')
+  const amqp_url = 'amqp://localhost:5673'
+  const connection = await amqp.connect(amqp_url)
   const channel = await connection.createChannel()
   
   await channel.assertExchange("checkout", "direct", { durable: true })
