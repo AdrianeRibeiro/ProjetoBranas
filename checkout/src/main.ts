@@ -2,6 +2,7 @@ import Checkout from "./application/usecase/Checkout"
 import GetOrdersByCpf from "./application/usecase/GetOrdersByCpf"
 import Preview from "./application/usecase/Preview"
 import ValidateCoupon from "./application/usecase/ValidateCoupon"
+import QueueController from "./infra/controller/QueueController"
 import RestController from "./infra/controller/RestController"
 import PgPromiseAdapter from "./infra/database/PgPromiseAdapter"
 import DatabaseRepositoryFactory from "./infra/factory/DatabaseRepositoryFactory"
@@ -24,7 +25,10 @@ async function init() {
   const getOrderByCpf = new GetOrdersByCpf(repositoryFactory.createOrderRepository())
   const validateCoupon = new ValidateCoupon(repositoryFactory.createCouponRepository())
   const httpServer = new ExpressAdapter()
-  new RestController(httpServer, preview, checkout, getOrderByCpf, validateCoupon)
+
+  new RestController(httpServer, preview, checkout, getOrderByCpf, validateCoupon, queue)
+  new QueueController(queue, checkout)
+
   httpServer.listen(3000)
 }
 

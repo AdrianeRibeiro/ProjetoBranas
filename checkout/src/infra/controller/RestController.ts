@@ -3,6 +3,7 @@ import GetOrdersByCpf from "../../application/usecase/GetOrdersByCpf"
 import Preview from "../../application/usecase/Preview"
 import ValidateCoupon from "../../application/usecase/ValidateCoupon"
 import HttpServer from "../http/HttpServer"
+import Queue from "../queue/Queue"
 
 export default class RestController {
 
@@ -11,7 +12,8 @@ export default class RestController {
     readonly preview: Preview,
     readonly checkout: Checkout,
     readonly getOrderByCpf: GetOrdersByCpf,
-    readonly validateCoupon: ValidateCoupon
+    readonly validateCoupon: ValidateCoupon,
+    readonly queue: Queue
   ) {
     httpServer.on("post", "/preview", async function(params: any, body: any) {
       const total = await preview.execute(body)
@@ -25,7 +27,8 @@ export default class RestController {
 		});
     
     httpServer.on("post", "/checkout", async function(params: any, body: any) {
-      checkout.execute(body)
+      //checkout.execute(body)
+      await queue.publish("placeOrder", body)
     })
     
     httpServer.on("get", "/orders/:cpf", async function(params: any, body: any) {

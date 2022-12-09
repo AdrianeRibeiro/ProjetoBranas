@@ -6,11 +6,14 @@ export default class DecrementStock {
   constructor(readonly stockRepository: StockRepository) {}
 
   async execute(input: Input): Promise<void> {
-    await this.stockRepository.save(new StockEntry(input.idItem, "out", input.quantity))
+    for(const orderItem of input.order.orderItems) {
+      await this.stockRepository.save(new StockEntry(orderItem.idItem, "out", orderItem.quantity))
+    }
   }
 }
 
 type Input = {
-  idItem: number,
-  quantity: number
+  order: {
+    orderItems: { idItem: number, quantity: number }[]
+  }
 }
