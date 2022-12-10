@@ -8,7 +8,7 @@
 [] quebras
 - [x] stock
 - [x] notification
-- [] checkout
+- [x] checkout
 
 npx jest --runInBand
 npx nodemon src/main.ts
