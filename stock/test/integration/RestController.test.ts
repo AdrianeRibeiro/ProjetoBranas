@@ -2,9 +2,15 @@ import axios from "axios"
 
 test("Deve decrementar o estoque", async function() {
   await axios.post('http://localhost:3003/clearStock')
-  const input = {
-   idItem: 1,
-   quantity: 10
+  const input = { 
+    order: {
+      orderItems: [
+        {
+          idItem: 1,
+          quantity: 10
+        }
+      ]
+	  }
   }
 
   await axios.post('http://localhost:3003/decrementStock', input)

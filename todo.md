@@ -6,8 +6,8 @@
 [x] conectar queue
 
 [] quebras
-- [] stock
-- [] notification
+- [x] stock
+- [x] notification
 - [] checkout
 
 npx jest --runInBand

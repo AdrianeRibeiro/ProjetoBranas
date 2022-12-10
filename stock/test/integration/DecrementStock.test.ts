@@ -13,9 +13,15 @@ test("Deve decrementar o estoque", async function() {
   await stockRepository.save(new StockEntry(1, "in", 20))
 
   const decrementStock = new DecrementStock(stockRepository)
-  const input = {
-    idItem: 1,
-    quantity: 10
+  const input = { 
+    order: {
+      orderItems: [
+        {
+          idItem: 1,
+          quantity: 10
+        }
+      ]
+	  }
   }
 
   await decrementStock.execute(input)

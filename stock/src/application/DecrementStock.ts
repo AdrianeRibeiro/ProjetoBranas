@@ -13,7 +13,7 @@ export default class DecrementStock {
 }
 
 type Input = {
-  order: {
-    orderItems: { idItem: number, quantity: number }[]
-  }
+	order: {
+		orderItems: { idItem: number, quantity: number }[]
+	}
 }
