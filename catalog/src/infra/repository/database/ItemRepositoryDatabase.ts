@@ -6,8 +6,15 @@ import Connection from "../../database/Connection";
 export default class ItemRepositoryDatabase implements ItemRepository {
 
   constructor(readonly connection: Connection) {}
-  getItems(): Promise<Item[]> {
-    throw new Error("Method not implemented.");
+
+  async getItems(): Promise<Item[]> {
+    const itemsData = await this.connection.query("select * from item", [])
+    const items: Item[] = []
+    for(const itemData of itemsData) {
+      items.push(new Item(itemData.id_item, itemData.description, parseFloat(itemData.price), new Dimension(itemData.width, itemData.height, itemData.length, itemData.weight)))
+    }
+
+    return items
   }
 
   async getItem(idItem: number): Promise<Item> {

@@ -1,13 +1,13 @@
 import ItemRepository from "../domain/repository/ItemRepository"
 
-export default class GetItem {
+export default class GetItems {
 
   constructor(readonly itemRepository: ItemRepository) {}
 
-  async execute(idItem: number): Promise<Output> {
-    const item = await this.itemRepository.getItem(idItem)
+  async execute(): Promise<Output> {
+    const items = await this.itemRepository.getItems();
 
-    return {
+    return items.map(item => ({
       idItem: item.idItem,
       description: item.description,
       price: item.price,
@@ -17,7 +17,7 @@ export default class GetItem {
       height: item.dimension?.height,
       length: item.dimension?.length,
       weight: item.dimension?.weight 
-    }
+    }))
   }
 }
 
@@ -31,4 +31,4 @@ type Output = {
   height?: number,
   length?: number,
   weight?: number 
-}
+}[]
