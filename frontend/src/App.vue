@@ -5,9 +5,11 @@
   const state = reactive({
     items: [],
     order: {
-      cpf: "",
-      orderItems: []
-    }
+      cpf: "097.313.449-69",
+      orderItems: [],
+      coupon: "",
+    },
+    total: 0
   })
 
   function addItem(item: any) {
@@ -17,6 +19,8 @@
     } else {
       state.order.orderItems.push({ idItem: item.idItem, quantity: 1 })
     }
+
+    preview(state.order)
   }
 
   function removeOrderItem(orderItem: any) {
@@ -27,6 +31,31 @@
         state.order.orderItems.splice(state.order.orderItems.indexOf(existingOrderItem), 1)
       }
     }
+
+    preview(state.order)
+  }
+
+  function validateCoupon(coupon: string) {
+    state.order.coupon = ""
+    axios.post("http://localhost:3000/validateCoupon", { code: coupon }).then(function(response) {
+      const isValid = response.data
+      if (isValid) {
+        state.order.coupon = coupon
+      }
+      preview(state.order)
+    });
+  }
+
+  function preview(order: any) {
+    axios.post("http://localhost:3000/preview", order).then(function(response) {
+      state.total = response.data
+    });
+  }
+
+  function checkout() {
+    axios.post("http://localhost:3000/checkout", order).then(function(response) {
+      state.total = response.data
+    });
   }
 
   axios.get("http://localhost:3002/items").then(function(response) {
@@ -42,11 +71,20 @@
     <button @click="addItem(item)">Add</button>
   </div>
 
-  <div v-for="orderItem in state.order.orderItem">
+  <label>cpf</label>
+  <input type="text" v-model="state.order.cpf"/>
+
+  <div v-for="orderItem in state.order.orderItems">
     {{orderItem.idItem}}
     {{orderItem.quantity}}
     <button @click="removeOrderItem(orderItem)">-</button>
   </div>
+
+  <label>coupon</label>
+  <input type="text" v-model="state.order.coupon" @blur="validateCoupon(state.order.coupon)"/>
+  {{state.order}}
+  {{state.total}}
+  <button @click="checkout(state.order)">Checkout</button>
 </template>
 
 <style scoped>
