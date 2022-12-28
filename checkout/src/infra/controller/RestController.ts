@@ -18,7 +18,7 @@ export default class RestController {
     httpServer.on("post", "/preview", async function(params: any, body: any) {
       const total = await preview.execute(body)
     
-      return { total }
+      return total
     })
 
     httpServer.on("post", "/validateCoupon", async function (params: any, body: any) {
