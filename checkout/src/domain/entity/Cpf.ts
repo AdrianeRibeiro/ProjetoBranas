@@ -1,6 +1,7 @@
 export default class Cpf {
 
   constructor(readonly value: string) {
+    console.log('value', value)
     if(!this.validate(value)) throw new Error("CPF inválido")
     this.value = value
   }

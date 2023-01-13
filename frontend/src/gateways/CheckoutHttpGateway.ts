@@ -6,7 +6,8 @@ export default class CheckoutHttpGateway implements CheckoutGateway {
   constructor(readonly httpClient: HttpClient, readonly baseUrl: string) {}
 
   async preview(order: any): Promise<any> {
-    return this.httpClient.post(`${this.baseUrl}/preview`, order)
+    const preview = await this.httpClient.post(`${this.baseUrl}/preview`, order)
+    return preview.total
   }
 
   async checkout(order: any): Promise<any> {
@@ -18,6 +19,7 @@ export default class CheckoutHttpGateway implements CheckoutGateway {
   }
 
   async getOrdersByCpf(cpf: string): Promise<any> {
+    console.log(cpf)
     return this.httpClient.get(`${this.baseUrl}/orders/${cpf}`)
   }
 }

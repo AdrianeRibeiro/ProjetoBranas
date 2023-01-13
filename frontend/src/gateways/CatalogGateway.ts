@@ -1,3 +1,5 @@
+import Item from "../entities/Item";
+
 export default interface CatalogGateway {
-  getItems (): Promise<any>
+  getItems (): Promise<Item[]>
 }
