@@ -1,3 +1,4 @@
+import GetOrdersByCpfQuery from "./application/query/GetOrdersByCpfQuery"
 import Checkout from "./application/usecase/Checkout"
 import GetOrdersByCpf from "./application/usecase/GetOrdersByCpf"
 import Preview from "./application/usecase/Preview"
@@ -22,11 +23,12 @@ async function init() {
   const queue = new RabbitMQAdapter()
   await queue.connect()
   const checkout = new Checkout(repositoryFactory, getItemGateway, calculateFreightGateway, decrementStockGateway, queue)
-  const getOrderByCpf = new GetOrdersByCpf(repositoryFactory.createOrderRepository())
+  const getOrderByCpf = new GetOrdersByCpf(repositoryFactory.createOrderRepository(), getItemGateway)
+  const getOrdersByCpfQuery = new GetOrdersByCpfQuery(connection)
   const validateCoupon = new ValidateCoupon(repositoryFactory.createCouponRepository())
   const httpServer = new ExpressAdapter()
 
-  new RestController(httpServer, preview, checkout, getOrderByCpf, validateCoupon, queue)
+  new RestController(httpServer, preview, checkout, getOrderByCpf, validateCoupon, getOrdersByCpfQuery, queue)
   new QueueController(queue, checkout)
 
   httpServer.listen(3000)

@@ -1,3 +1,4 @@
+import GetOrdersByCpfQuery from "../../application/query/GetOrdersByCpfQuery"
 import Checkout from "../../application/usecase/Checkout"
 import GetOrdersByCpf from "../../application/usecase/GetOrdersByCpf"
 import Preview from "../../application/usecase/Preview"
@@ -13,6 +14,7 @@ export default class RestController {
     readonly checkout: Checkout,
     readonly getOrderByCpf: GetOrdersByCpf,
     readonly validateCoupon: ValidateCoupon,
+    readonly getOrdersByCpfQuery: GetOrdersByCpfQuery,
     readonly queue: Queue
   ) {
     httpServer.on("post", "/preview", async function(params: any, body: any) {
@@ -32,7 +34,8 @@ export default class RestController {
     })
     
     httpServer.on("get", "/orders/:cpf", async function(params: any, body: any) {
-      const orders = await getOrderByCpf.execute(params.cpf)
+      const orders = await getOrdersByCpfQuery.execute(params.cpf)
+      //const orders = await getOrderByCpf.execute(params.cpf)
       
       return orders
     })
