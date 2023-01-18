@@ -1,14 +1,34 @@
-[x] conectar no banco
-[] corrigir testes quebrando
-  - [] checkout integration
-[x] DDD readme
-[x] limpar checkout
-[x] conectar queue
+[] ajustar readme
+  [] catalog
+  [] checkout
+  [] freight
+  [] frontend
+  [] notification
+  [x] queue
+  [x] rabbit
+  [x] sql
+  [] stock
+[] corrigir bugs
+[] certificado no linkedin
 
-[] quebras
-- [x] stock
-- [x] notification
-- [x] checkout
+# Subir o projeto
 
-npx jest --runInBand
-npx nodemon src/main.ts
+> sql e rabbitMQ: 
+
+`docker-compose up`
+
+<br>
+
+> catalog, checkout, freight, stock
+
+`subir aplicação: npx nodemon src/main.ts`
+
+`rodar testes automatizados: npx jest`
+
+<br>
+
+> frontend
+
+`subir aplicação: yarn dev`
+
+`rodar testes automatizados: yarn test`
