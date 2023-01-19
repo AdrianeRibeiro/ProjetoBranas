@@ -1,16 +1,3 @@
-[] ajustar readme
-  [] catalog
-  [] checkout
-  [] freight
-  [] frontend
-  [] notification
-  [x] queue
-  [x] rabbit
-  [x] sql
-  [] stock
-[] corrigir bugs
-[] certificado no linkedin
-
 # Subir o projeto
 
 > sql e rabbitMQ: 

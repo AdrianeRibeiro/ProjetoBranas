@@ -18,10 +18,9 @@ export default class RestController {
     readonly queue: Queue
   ) {
     httpServer.on("post", "/preview", async function(params: any, body: any) {
-      const total = await preview.execute(body)
-    
-      return total
-    })
+			const total = await preview.execute(body)
+			return { total }
+		})
 
     httpServer.on("post", "/validateCoupon", async function (params: any, body: any) {
 			const output = await validateCoupon.execute(body);
